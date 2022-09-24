@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 app.all('*', function(req, res, next){
-    res.header('Access-Control-Allow-Origin', 'http://hebenben.com');
+    res.header('Access-Control-Allow-Origin', 'http://www.hebenben.com');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   
