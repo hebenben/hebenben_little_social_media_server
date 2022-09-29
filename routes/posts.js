@@ -12,8 +12,8 @@ router.post("/",async (req,res)=>{
             const savePost = await newPost.save();
             return res.json({ status: true, savePost });
         }
-    }catch (ex) {
-        return res.json({status: false, msg: ex});
+    }catch (err) {
+        return res.json({status: false, msg: err});
     }
 })
 
@@ -30,8 +30,8 @@ router.put("/:id",async (req,res)=>{
     // }catch(err){
     //     res.status(500).json(err);
     // }
-    } catch (ex) {
-        return res.json({status: false, msg: ex});
+    } catch (err) {
+        return res.json({status: false, msg: err});
     }
 })
 
@@ -45,8 +45,8 @@ router.delete("/:id",async (req,res)=>{
         }else{
             return res.json({status: false, msg: "you can delete only your post"});
         }
-    }catch (ex) {
-        return res.json({status: false, msg: ex});
+    }catch (err) {
+        return res.json({status: false, msg: err});
       }
 })
 
@@ -61,8 +61,8 @@ router.put("/like/:id",async (req,res)=>{
             await post.updateOne({$pull:{likes: req.body.userId}})
             return res.json({ status: true, msg:"The post has been disliked" });
         }
-    }catch (ex) {
-        return res.json({ status: false, msg: ex.msg });
+    }catch (err) {
+        return res.json({ status: false, msg: err.msg });
       }
 })
 //get a post by Id
@@ -70,8 +70,8 @@ router.get("/:id",async (req,res)=>{
     try{
         const post = await Post.findById(req.params.id);
         res.status(200).json(post)
-    }catch (ex) {
-        return res.json({status: false, msg: ex});
+    }catch (err) {
+        return res.json({status: false, msg: err});
       }
 })
 
@@ -80,8 +80,8 @@ router.get("/search/:desc",async (req,res)=>{
     try{
         const post = await Post.find({desc:{$regex:req.params.desc}});
         return res.json({status: true, posts: post});
-    }catch (ex) {
-        return res.json({status: false, msg: ex});
+    }catch (err) {
+        return res.json({status: false, msg: err});
       }
 })
 //get timeline posts
@@ -95,8 +95,8 @@ router.get("/timeline/:userId",async (req,res)=>{
             })
         );
         return res.json({status: true, posts: userPosts.concat(...friendPosts)});
-    }catch (ex) {
-        return res.json({status: false, msg: ex});
+    }catch (err) {
+        return res.json({status: false, msg: err});
       }
 })
 
