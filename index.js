@@ -77,7 +77,7 @@ const server = app.listen(8800, ()=> {
 
 const io = socket(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: "*",
       credentials: true,
     },
   });
@@ -90,9 +90,10 @@ const io = socket(server, {
     });
   
     socket.on("send-msg", (data) => {
+      console.log(data);
       const sendUserSocket = onlineUsers.get(data.to);
       if (sendUserSocket) {
-        socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+        socket.to(sendUserSocket).emit("msg-recieve", data);
       }
     });
   });
