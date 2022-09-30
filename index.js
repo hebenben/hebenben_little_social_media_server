@@ -11,6 +11,7 @@ const postRoute = require("./routes/posts")
 const messageRoute = require("./routes/messages")
 const multer = require("multer");
 const path = require("path")
+const socket = require("socket.io");
 
 dotenv.config();
 
@@ -70,6 +71,28 @@ app.use("/api/posts", postRoute);
 app.use("/api/message", messageRoute);
 
 
-app.listen(8800, ()=> {
+const server = app.listen(8800, ()=> {
     console.log("Backend Server is running!");
 })
+
+const io = socket(server, {
+    cors: {
+      origin: "http://localhost:3000",
+      credentials: true,
+    },
+  });
+
+  global.onlineUsers = new Map();
+  io.on("connection", (socket) => {
+    global.chatSocket = socket;
+    socket.on("add-user", (userId) => {
+      onlineUsers.set(userId, socket.id);
+    });
+  
+    socket.on("send-msg", (data) => {
+      const sendUserSocket = onlineUsers.get(data.to);
+      if (sendUserSocket) {
+        socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+      }
+    });
+  });

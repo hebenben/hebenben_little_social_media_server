@@ -1,11 +1,11 @@
-const Message = require("../models/Message");
+const MessageM = require("../models/Message");
 const router = require("express").Router();
 
 router.post("/getMsg", async (req, res) => {
     try{
         const { from, to } = req.body;
-        const messages = await Message.find({
-            users:{
+        const messages = await MessageM.find({
+            user:{
                 $all: [from, to],
             },
         }).sort({ updatedAt: 1});
@@ -26,9 +26,9 @@ router.post("/getMsg", async (req, res) => {
 router.post("/addMsg", async (req, res) => {
     try{
         const { from, to, message } = req.body;
-        const data = await Message.create({
+        const data = await MessageM.create({
             message: { text: message},
-            users: [from, to],
+            user: [from, to],
             sender: from,
         });
         if(data){

@@ -99,5 +99,22 @@ router.put("/unfollow/:id", async(req,res)=>{
         return res.json({ status: false, msg:"you cant unfollow yourself" });
     }
 })
+//get follow users
+router.post("/chatUsers/",  async (req, res) => {
+    try {
+      const users = await User.find({ _id: { $ne: req.body.id } }).select([
+        "username",
+        "avatarImage",
+        "_id",
+      ]);
+      console.log(req.body.userList);
+      const data = users.filter((item) => {
+        return req.body.userList.includes(item._id.toString())
+      })
+      return res.json({ status: true, data:data });
+    } catch (ex) {
+        return res.json({ status: false, msg:"userList catch error" });
+    }
+  })
 
 module.exports = router;
